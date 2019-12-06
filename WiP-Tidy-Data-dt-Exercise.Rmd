@@ -109,6 +109,7 @@ library(here)
 wip <- fread(here("data", "WB-WiP.csv"), 
              skip = 4, header = TRUE,
              check.names = TRUE)
+wip
 ```
 
 # Continue from here...
