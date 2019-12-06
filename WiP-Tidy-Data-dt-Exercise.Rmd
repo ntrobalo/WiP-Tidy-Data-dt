@@ -109,13 +109,76 @@ library(here)
 wip <- fread(here("data", "WB-WiP.csv"), 
              skip = 4, header = TRUE,
              check.names = TRUE)
-wip
 ```
 
 # Continue from here...
 
+```{r}
+wip
+class(wip)
+str(wip)
+```
+
+```{r }
+wip[, .N,by=.(V65)]
+```
 
 
+```{r}
+wip[, .N ,by=.(Indicator.Code)]
+wip[, .N ,by=.(Indicator.Name)]
+```
+
+```{r}
+wip[, c("Indicator.Name","Indicator.Code","V65"):=NULL]
+setnames(wip,c("Country.Name","Country.Code"), c("Country","Code"))
+head(names(wip))
+tail(names(wip))
+```
+
+```{r Reshape to long format}
+WP <- melt(wip,
+           id.vars = c("Country","Code"),
+           measure = patterns("^X"),
+           variable.name = "YearC",
+           value.name = c("pctWiP"),
+           na.rm = TRUE)
+WP
+
+
+```
+
+```{r Final tweaks to WP}
+WP[, `:=`(Year=as.numeric(gsub("[^[:digit:].]", "", YearC)),
+Ratio = (100-pctWiP)/pctWiP)][ , YearC:=NULL]
+
+setcolorder(WP, c("Country", "Code", "Year", "pctWiP", "Ratio"))
+
+WP
+```
+
+
+## 7. Questions
+
+The objective is to look at the geographical and time trends in the data. We will answer the following questions.
+• What are the time trends for Portugal?
+• How does Portugal compare to other countries?
+• Which countries have the highest percentage of women in
+parliament by year?
+• How do continents compare?
+• What are the global trends over time?
+
+
+# Exercise - Without Programming.
+• Which country do you think has the highest percentage of women in parliament?
+• In each continent (i.e. Africa, Americas, Asia, Europe and Oceania), which country has the highest percentage of women in parliament?
+• What is the world percentage of women in parliament in 2018?
+
+
+
+```{r}
+
+```
 
 
 
